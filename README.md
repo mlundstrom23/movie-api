@@ -10,7 +10,7 @@ Your API should be backed by a MySQL database which stores the seed data in vari
 
 **GET /movies/X** - (where X is a numeric ID) this route should return the single movie associated with the ID represented by X
 
-**POST /movies** - this route should accept a JSON formatted movie an add that movie to the database. The body of the request should match the following format:
+**POST /movies** - this route should accept a JSON formatted movie an add that movie to the database. The body of the request should match the following format: 
 
 ```json
 { "title": "Only Lovers Left Alive", "directors": "Jim Jarmusch", "releaseDate": "2013-12-25", "rating": "R", "runTime": 123, "genres": "Drama, Musical" }
