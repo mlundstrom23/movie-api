@@ -1,0 +1,32 @@
+{
+  "name": "movie-api",
+  "version": "1.0.0",
+  "description": "## Instructions In the initial commit to this project, you have been provided with a CSV file that contains data on the American Film Institute's (AFI) Top 100 Movies. Your task is to create a database backed Express API for access the details of these films.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon in index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mlundstrom23/movie-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mlundstrom23/movie-api/issues"
+  },
+  "homepage": "https://github.com/mlundstrom23/movie-api#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mysql2": "^2.0.1",
+    "sequelize": "^5.21.2"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "nodemon": "^1.19.4"
+  }
+}
