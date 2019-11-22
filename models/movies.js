@@ -1,7 +1,8 @@
 module.exports = (connection, Sequelize) => {
     return connection.define('movies', {
-        id: {
-            type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true,
+        id: { type: Sequelize.INTEGER, 
+              autoIncrement: true, 
+              primaryKey: true,
         },
         title: { type: Sequelize.STRING, },
         releaseDate: { type: Sequelize.STRING, },

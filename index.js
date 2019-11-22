@@ -1,10 +1,13 @@
 const express = require('express')
-const movies = require('./movies.json')
+const models = require('./models')
 const bodyParser = require('body-parser')
 const http_port = 1337;
+const Op = require('sequelize').Op
+
 const app = express()
 
-app.get('/movies', (request, response) => {
+app.get('/movies', async (request, response) => {
+    const movies = await models.Movies.findAll()
     response.send(movies)
 })
 

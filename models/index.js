@@ -13,20 +13,21 @@ const connection = new Sequelize(config.database, config.username, config.passwo
     dialect: config.dialect,
 })
 
+
 const Movies = MoviesModel(connection, Sequelize)
 const Directors = DirectorsModel(connection, Sequelize)
 const Genres = GenresModel(connection, Sequelize)
 const MovieDirectors = movDirModel(connection, Sequelize, Movies, Directors)
 const MovieGenres = movGenModel(connection, Sequelize, Movies, Genres) 
 
-Movies.belongsToMany(Directors, { through: movDirModel, foreignKey: 'movieId' })
-Directors.belongsToMany(Movies, { through: movDirModel, foreignKey: 'directorId' })
-Movies.belongsToMany(Genres, { through: movGenModel, foreignKey: 'movieId' })
-Genres.belongsToMany(Movies, { through: movGenModel, foreignKey: 'genreId' })
-MovieDirectors.belongsTo(Movies, { foreignKey: 'movieId', targetKey: 'movieId', as: 'Movies' })
-MovieDirectors.belongsTo(Directors, { foreignKey: 'directorId', targetKey: 'directorId', as: 'Directors' })
-MovieGenres.belongsTo(Movies, { foreignKey: 'movieId', targetKey: 'movieId', as: 'Movies' })
-MovieGenres.belongsTo(Genres, { foreignKey: 'genreId', targetKey: 'genreId', as: 'Genres' })
+Movies.belongsToMany(Directors, { through: 'movieDirectors', foreignKey: 'movieId', as: 'directors' })
+Directors.belongsToMany(Movies, { through: 'movieDirectors', foreignKey: 'directorId', as: 'movies-dir' })
+Movies.belongsToMany(Genres, { through: 'movieGenres', foreignKey: 'movieId', as: 'genres' })
+Genres.belongsToMany(Movies, { through: 'movieGenres', foreignKey: 'genreId', as: 'movies-gen' })
+MovieDirectors.belongsTo(Movies, { foreignKey: 'movieId' })
+MovieDirectors.belongsTo(Directors, { foreignKey: 'directorId' })
+MovieGenres.belongsTo(Movies, { foreignKey: 'movieId' })
+MovieGenres.belongsTo(Genres, { foreignKey: 'genreId' })
 
 module.exports = {
     MovieDirectors,

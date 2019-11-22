@@ -14,7 +14,7 @@ CREATE TABLE movies (
 
 CREATE TABLE directors (
   id INT AUTO_INCREMENT,
-  directors VARCHAR(255),
+  director VARCHAR(255),
   createdAt DATETIME DEFAULT NOW(),
   updatedAt DATETIME DEFAULT NOW() ON UPDATE NOW(),
   deletedAt DATETIME DEFAULT NOW(),
@@ -23,7 +23,7 @@ CREATE TABLE directors (
 
 CREATE TABLE genres (
   id INT AUTO_INCREMENT,
-  genres VARCHAR(255),
+  genre VARCHAR(255),
   createdAt DATETIME DEFAULT NOW(),
   updatedAt DATETIME DEFAULT NOW() ON UPDATE NOW(),
   deletedAt DATETIME DEFAULT NOW(),
