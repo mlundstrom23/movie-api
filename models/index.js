@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize')
 const allConfigs = require('../config/sequelize')
-const MoviesModel = require('./movies')
-const DirectorsModel = require('./directors')
-const GenresModel = require('./genres')
+const MovieModel = require('./movies')
+const DirectorModel = require('./directors')
+const GenreModel = require('./genres')
 const movDirModel = require('./movieDirectors')
 const movGenModel = require('./movieGenres')
 
@@ -14,25 +14,27 @@ const connection = new Sequelize(config.database, config.username, config.passwo
 })
 
 
-const Movies = MoviesModel(connection, Sequelize)
-const Directors = DirectorsModel(connection, Sequelize)
-const Genres = GenresModel(connection, Sequelize)
-const MovieDirectors = movDirModel(connection, Sequelize, Movies, Directors)
-const MovieGenres = movGenModel(connection, Sequelize, Movies, Genres) 
+const Movie = MovieModel(connection, Sequelize)
+const Director = DirectorModel(connection, Sequelize)
+const Genre = GenreModel(connection, Sequelize)
+const MovieDirectors = movDirModel(connection, Sequelize, Movie, Director)
+const MovieGenres = movGenModel(connection, Sequelize, Movie, Genre) 
 
-Movies.belongsToMany(Directors, { through: 'movieDirectors', foreignKey: 'movieId', as: 'directors' })
-Directors.belongsToMany(Movies, { through: 'movieDirectors', foreignKey: 'directorId', as: 'movies-dir' })
-Movies.belongsToMany(Genres, { through: 'movieGenres', foreignKey: 'movieId', as: 'genres' })
-Genres.belongsToMany(Movies, { through: 'movieGenres', foreignKey: 'genreId', as: 'movies-gen' })
-MovieDirectors.belongsTo(Movies, { foreignKey: 'movieId' })
-MovieDirectors.belongsTo(Directors, { foreignKey: 'directorId' })
-MovieGenres.belongsTo(Movies, { foreignKey: 'movieId' })
-MovieGenres.belongsTo(Genres, { foreignKey: 'genreId' })
+Movie.belongsToMany(Director, {through: 'movieDirectors', foreignKey: 'movieId'})
+Director.belongsToMany(Movie, { through: 'movieDirectors', foreignKey: 'directorId'})
+Movie.belongsToMany(Genre, { through: 'movieGenres', foreignKey: 'movieId'})
+Genre.belongsToMany(Movie, { through: 'movieGenres', foreignKey: 'genreId'})
+Movie.hasMany(MovieDirectors)
+Director.hasMany(MovieDirectors)
+MovieDirectors.belongsTo(Movie, { foreignKey: 'movieId' })
+MovieDirectors.belongsTo(Director, { foreignKey: 'directorId' })
+MovieGenres.belongsTo(Movie, { foreignKey: 'movieId' })
+MovieGenres.belongsTo(Genre, { foreignKey: 'genreId' })
 
 module.exports = {
     MovieDirectors,
     MovieGenres,
-    Directors,
-    Genres,
-    Movies,
+    Director,
+    Genre,
+    Movie,
 }

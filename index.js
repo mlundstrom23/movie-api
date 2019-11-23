@@ -6,9 +6,20 @@ const Op = require('sequelize').Op
 
 const app = express()
 
-app.get('/movies', async (request, response) => {
-    const movies = await models.Movies.findAll()
-    response.send(movies)
+app.get('/movies', (request, response) => {
+    models.Movie.findAll({
+                attributes: ["id",  "title", "directors.director", "releaseDate", "rating", "runTime"], 
+                include: [{
+                    attributes: [],
+                    model: models.Director,
+                    nested: false,
+                    required: true,
+                }],
+                raw: true,
+            }).then((movie) => {
+        response.send(movie)
+    })
+    
 })
 
 app.get('/movies/:filter', (request, response) => {

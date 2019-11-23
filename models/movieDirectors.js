@@ -1,4 +1,4 @@
-module.exports = (connection, Sequelize, Movies, Directors) => {
+module.exports = (connection, Sequelize, Movie, Director) => {
     return connection.define('movieDirectors', {
         id: { type: Sequelize.INTEGER, 
               autoIncrement: true, 
@@ -6,13 +6,13 @@ module.exports = (connection, Sequelize, Movies, Directors) => {
         },
         movieId: { type: Sequelize.INTEGER, 
                    reference: { 
-                     model: Movies, 
+                     model: Movie, 
                      key: 'id' 
                    } 
         },
         directorId: { type: Sequelize.INTEGER, 
                       reference: { 
-                        model: Directors, 
+                        model: Director, 
                         key: 'id' 
                       } 
         }
