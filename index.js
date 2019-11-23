@@ -10,13 +10,14 @@ app.get('/movies', (request, response) => {
     models.Movie.findAll({
                 attributes: ["id",  "title", "directors.director", "releaseDate", "rating", "runTime"], 
                 include: [{
-                    attributes: [],
+                    attributes: ["director"],
                     model: models.Director,
                     nested: false,
                     required: true,
                 }],
-                raw: true,
+                //raw: true,
             }).then((movie) => {
+        // console.log(movie)
         response.send(movie)
     })
     
