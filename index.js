@@ -1,3 +1,4 @@
+const reject = require('./reject').reject
 const express = require('express')
 const models = require('./models')
 const bodyParser = require('body-parser')
@@ -8,17 +9,24 @@ const app = express()
 
 app.get('/movies', (request, response) => {
     models.Movie.findAll({
-                attributes: ["id",  "title", "directors.director", "releaseDate", "rating", "runTime"], 
+                attributes: ["id", "title", "directors.director", "releaseDate", "rating", "runTime"], 
                 include: [{
-                    attributes: ["director"],
+                    attributes: [],
                     model: models.Director,
-                    nested: false,
-                    required: true,
+                    through: {attributes: []},
                 }],
-                //raw: true,
-            }).then((movie) => {
-        // console.log(movie)
-        response.send(movie)
+                raw: true,
+            }).then((movies) => {
+                //const filteredMovie = reject(movie, ["directors.movieDirectors.id"])
+                //console.log(filteredMovie)
+        const filteredMovies = movies.map(movie => {
+            return reject(movie, ["directors.movieDirectors.id", 
+                                  "directors.movieDirectors.movieId", 
+                                  "directors.movieDirectors.directorId",
+                                  "directors.movieDirectors.createdAt",
+                                  "directors.movieDirectors.updatedAt"])
+        })        
+        response.send(filteredMovies)
     })
     
 })
