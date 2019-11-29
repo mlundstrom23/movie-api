@@ -1,5 +1,5 @@
-module.exports = (connection, Sequelize, Movie, Genre) => {
-    return connection.define('movieGenres', {
+module.exports = (connection, Sequelize, Movie, Director, Genre) => {
+    return connection.define('joinTables', {
         id: { type: Sequelize.INTEGER, 
               autoIncrement: true, 
               primaryKey: true,
@@ -9,6 +9,12 @@ module.exports = (connection, Sequelize, Movie, Genre) => {
                      model: Movie, 
                      key: 'id' 
                    } 
+        },
+        directorId: { type: Sequelize.INTEGER, 
+                      reference: { 
+                        model: Director, 
+                        key: 'id' 
+                      } 
         },
         genreId: { type: Sequelize.INTEGER, 
                    reference: { 

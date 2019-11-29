@@ -28,7 +28,7 @@ module.exports = {
             autoIncrement: true, 
             primaryKey: true,
       },
-      genre: { type: Sequelize.STRING, },
+      name: { type: Sequelize.STRING, },
       createdAt: { type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), },
       updatedAt: { type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'), },  
       deletedAt: { type: Sequelize.DATE },
@@ -39,35 +39,13 @@ module.exports = {
             autoIncrement: true, 
             primaryKey: true,
       },
-      director: { type: Sequelize.STRING, },
+      name: { type: Sequelize.STRING, },
       createdAt: { type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), },
       updatedAt: { type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'), },  
       deletedAt: { type: Sequelize.DATE },
     })
 
-    await queryInterface.createTable('movieGenres', {
-      id: { type: Sequelize.INTEGER, 
-            autoIncrement: true, 
-            primaryKey: true,
-      },
-      movieId: { type: Sequelize.INTEGER, 
-                 reference: { 
-                   model: 'movies', 
-                   key: 'id' 
-                 } 
-      },
-      genreId: { type: Sequelize.INTEGER, 
-                 reference: { 
-                   model: 'genres', 
-                   key: 'id' 
-                 } 
-      },
-      createdAt: { type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), },
-      updatedAt: { type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'), },  
-      deletedAt: { type: Sequelize.DATE },
-    })
-
-    return queryInterface.createTable('movieDirectors', {
+    return queryInterface.createTable('joinTables', {
       id: { type: Sequelize.INTEGER, 
             autoIncrement: true, 
             primaryKey: true,
@@ -84,6 +62,12 @@ module.exports = {
                       key: 'id' 
                     } 
       },
+      genreId: { type: Sequelize.INTEGER, 
+                 reference: { 
+                   model: 'genres', 
+                   key: 'id' 
+                 } 
+      },
       createdAt: { type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), },
       updatedAt: { type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'), },  
       deletedAt: { type: Sequelize.DATE },
@@ -99,8 +83,7 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
-    await queryInterface.dropTable('movieDirectors')
-    await queryInterface.dropTable('movieGenres')
+    await queryInterface.dropTable('joinTables')
     await queryInterface.dropTable('genres')
     await queryInterface.dropTable('directors')
     return queryInterface.dropTable('movies')

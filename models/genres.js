@@ -4,6 +4,6 @@ module.exports = (connection, Sequelize) => {
               autoIncrement: true, 
               primaryKey: true,
         },
-        genre: { type: Sequelize.STRING, },
+        name: { type: Sequelize.STRING, },
     })
 }
