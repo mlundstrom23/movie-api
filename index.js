@@ -1,19 +1,27 @@
 const express = require('express')
+// Model imports
 const models = require('./models')
 const bodyParser = require('body-parser')
+// Allows use of Sequelize operators
 const Op = require('sequelize').Op
 const http_port = 1337;
-
+// References Express app objects
 const app = express()
 
+// Uses body-parser throughout whole document
 app.use(bodyParser.json());
 
+
+// GET handle to return all movies
 app.get('/movies', (request, response) => {
+    /* Finding all movies with specific attributes 
+       that include genre and director model attributes */
     models.Movie.findAll({
         attributes: ["id", "title", "releaseDate", "rating", "runTime"],
         include: [{
             attributes: ['id', 'name'],
             model: models.Director,
+            // Ignoring attributes of join table
             through: { attributes: [] },
         }, {
             attributes: ['id', 'name'],
@@ -26,8 +34,12 @@ app.get('/movies', (request, response) => {
 
 })
 
+// GET request for a single movie by ID number
 app.get('/movies/:movieId', async (request, response) => {
+    // Referencing data to access :movieId => http:.../movies/65
     const { movieId } = request.params
+    /* Finding a match where ID number corresponds to movies.id 
+       Including model attributes */
     const match = await models.Movie.findAll({
         where: { id: movieId },
         attributes: ["id", "title", "releaseDate", "rating", "runTime"],
@@ -41,7 +53,7 @@ app.get('/movies/:movieId', async (request, response) => {
             through: { attributes: [] },
         }]
     })
-    
+    // If there's a match, show it
     if (match) {
         response.send(match)
     } else {
@@ -49,8 +61,12 @@ app.get('/movies/:movieId', async (request, response) => {
     }
 })
 
+// GET request for directors by ID number
 app.get('/directors/:directorId', async (request, response) => {
+    // Referencing data to access :directorId => ex: http:.../directors/34
     const { directorId } = request.params
+    /* Finding a match where ID number corresponds to directors.id 
+       Including model attributes */
     const match = await models.Director.findAll({
         where: { id: directorId },
         attributes: ['id', 'name'],
@@ -58,9 +74,10 @@ app.get('/directors/:directorId', async (request, response) => {
             attributes: ["id", "title", "releaseDate", "rating", "runTime"],
             model: models.Movie,
             through: { attributes: [] },
-            include: [ { model: models.Genre, 
+            // Nested genres model so they will not show separately
+            include: [{ model: models.Genre, 
                          attributes: ['id', 'name'], 
-                         through: { attributes: [] } } ]
+                         through: { attributes: [] }}]
         }]
     })
     
@@ -85,7 +102,7 @@ app.get('/genres/:genreName', async (request, response) => {
                          through: { attributes: [] } } ]
         }]
     })
-    
+    // If there's a match, show it
     if (match) {
         response.send(match)
     } else {
@@ -93,11 +110,12 @@ app.get('/genres/:genreName', async (request, response) => {
     }
 })
 
+// POST request to create a movie entry
 app.post('/movies', async (request, response) => {
     // Get request body, and isolate director and genre models from models.Movie
     const { directors, genres, ...restOfBody } = request.body
 
-    //If directors, genres or movie info is not included in body, send error message
+    // If directors, genres or movie info is not included in body, send error message
     if (
        !restOfBody.title ||
        !directors ||
@@ -201,6 +219,7 @@ app.post('/movies', async (request, response) => {
     }    
 })
 
+// DELETE request by movie ID number
 app.delete('/movies/:movieId', async (request, response) => {
     const { movieId } = request.params
     const deleteMovie = await models.Movie.destroy({
@@ -214,10 +233,12 @@ app.delete('/movies/:movieId', async (request, response) => {
     response.status(202).send("You have successfully deleted all entries.", { deleteMovie, deleteJoinEntry })
 })
 
+// Message to send if page is incorrectly put in
 app.all('*', (request, response) => {
     response.send('Uh-oh, page not found.')
 })
 
+// Message to send if port connection is successfully working
 app.listen(http_port, () => {
     console.log('Server is up and running.')
 })
